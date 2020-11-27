@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     public GameObject menuGameOver;
     //public GameObject menuPuntuacion;
     public Text scoreCount;
+    public Text recordScore;
     public float timeDesfase;
+    public AudioSource musiquita;
 
     public int score = 0;
     public GameObject col;
@@ -33,6 +35,9 @@ public class GameManager : MonoBehaviour
         InvokeRepeating("addScore", 1.0f, 1.0f);
         score = 0;
 
+        //Musica
+        musiquita = GetComponent<AudioSource>();
+        musiquita.Play();
 
         //Crear Mapa
         for (int i=0; i<21; i++)
@@ -43,12 +48,15 @@ public class GameManager : MonoBehaviour
         //Crear piedras
         obstaculos.Add(Instantiate(piedra1, new Vector2(-14, -2), Quaternion.identity));
         obstaculos.Add(Instantiate(piedra2, new Vector2(-18, -2), Quaternion.identity));
+
+        //Max Score
+        GetMaxScore();
     }
 
     // Update is called once per frame
     void Update()
     {
-        print(score);
+        //print(score);
         if (start == false)
         {
             if (Input.GetKeyDown(KeyCode.X))
@@ -59,7 +67,13 @@ public class GameManager : MonoBehaviour
 
         if (start == true && gameOver == true)
         {
+            //Guarda record al gameover
+            SetMaxScore();
+
+            musiquita.Stop();
+
             menuGameOver.SetActive(true);
+            
 
             if (Input.GetKeyDown(KeyCode.X))
             {
@@ -108,7 +122,7 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
-
+    //Gestio de puntuacions
     void addScore()
     {
         if (start == true && gameOver == false) {
@@ -118,6 +132,21 @@ public class GameManager : MonoBehaviour
                
         }
            
+    }
+
+    void GetMaxScore()
+    {
+        int max = PlayerPrefs.GetInt("marcador", 0);
+
+        recordScore.text = max.ToString();
+    }
+    void SetMaxScore()
+    {
+        if (score > PlayerPrefs.GetInt("marcador"))
+        {
+            PlayerPrefs.SetInt("marcador", score);
+        }
+        
     }
 }
 
