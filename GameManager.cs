@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject menuGameOver;
     //public GameObject menuPuntuacion;
     public Text scoreCount;
+    public float timeDesfase;
 
     public int score = 0;
     public GameObject col;
@@ -74,14 +75,16 @@ public class GameManager : MonoBehaviour
             fondo.material.mainTextureOffset = fondo.material.mainTextureOffset + new Vector2(0.02f, 0) * Time.deltaTime;
 
             //Moure mapa
+            timeDesfase = Time.deltaTime;
             for (int i = 0; i < cols.Count; i++)
             {
 
                 if (cols[i].transform.position.x <= -10)
                 {
-                    cols[i].transform.position = new Vector3(10f, -3, 0);
+                    // cols[i].transform.position = new Vector3(10f, -3, 0);
+                    cols[i].transform.position = cols[i].transform.position + new Vector3(20f, 0, 0);
                 }
-                cols[i].transform.position = cols[i].transform.position + new Vector3(-1f, 0, 0) * Time.deltaTime * velocidad;
+                cols[i].transform.position = cols[i].transform.position + new Vector3(-1f, 0, 0) * timeDesfase * velocidad;
 
             }
             //Moure pedres
@@ -94,9 +97,8 @@ public class GameManager : MonoBehaviour
                     obstaculos[i].transform.position = new Vector3(randomObs, -2, 0);
                 }
                 obstaculos[i].transform.position = obstaculos[i].transform.position + new Vector3(-1f, 0, 0) * Time.deltaTime * velocidad;
-                print(Time.deltaTime);
             }
-
+            print(velocidad);
         }
 
 
